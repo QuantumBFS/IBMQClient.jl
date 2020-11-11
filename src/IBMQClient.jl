@@ -1,5 +1,9 @@
 module IBMQClient
 
-# Write your package code here.
+using HTTP
+using JSON
+
+include("rest.jl")
+include("ibmq.jl")
 
 end
