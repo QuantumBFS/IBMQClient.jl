@@ -2,12 +2,13 @@ module REST
 
 using HTTP
 using JSON
+using URIs
 
 abstract type AbstractAPI end
 
 # naive API type
 struct API <: AbstractAPI
-    endpoint::HTTP.URI
+    endpoint::URI
 end
 
 API(api::AbstractAPI) = API(endpoint(api))
@@ -47,13 +48,13 @@ patch(api::AbstractAPI, path::String, body=HTTP.nobody; kw...) = request(api, "P
 head(api::AbstractAPI, path::String, body=HTTP.nobody; kw...) = request(api, "HEAD", path, body; kw...)
 
 function api_uri(api::AbstractAPI, path::String, query=nothing)
-    uri = endpoint(api)::HTTP.URI
+    uri = endpoint(api)::URI
     # NOTE: this directly set the query to query
     if query === nothing
-        return merge(endpoint(api); path=uri.path * path)
+        return joinpath(api.endpoint, path)
     else
         isempty(uri.query) || error("non empty query in API endpoint is not supported")
-        return merge(endpoint(api); path=uri.path * path, query=query)
+        return URI(joinpath(api.endpoint, path); query=query)
     end
 end
 

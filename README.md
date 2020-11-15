@@ -1,6 +1,7 @@
 # IBMQClient
 
-Julia Wrapper for the IBM Quantum Experience REST API.
+Julia Wrapper for the IBM Quantum Experience REST API. This API wrapper is based on
+IBM Q official implementation.
 
 ## Installation
 
