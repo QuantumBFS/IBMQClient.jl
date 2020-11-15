@@ -12,7 +12,7 @@ end
 
 API(api::AbstractAPI) = API(endpoint(api))
 endpoint(api::AbstractAPI) = api.endpoint
-api_layers(api::AbstractAPI; kw...) = HTTP.stack(;kw...)
+api_layers(::AbstractAPI; kw...) = HTTP.stack(;kw...)
 
 function request(api::AbstractAPI, method::String, path::String, body=HTTP.nobody; headers=HTTP.Header[], query=nothing, kw...)
     uri = api_uri(api, path, query)
