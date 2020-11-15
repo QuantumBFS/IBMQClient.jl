@@ -198,6 +198,21 @@ function devices(api::ProjectAPI, access_token::String; timeout = 0)
     return [IBMQDevice(dev) for dev in raw_devs]
 end
 
+function jobs(api::ProjectAPI, access_token::String; descending::Bool=true, limit::Int=10, skip::Int=0, extra_filter=nothing)
+    order = descending ? "DESC" : "ASC"
+    query = Dict{String, Any}(
+        "order" => "creationDate " * order,
+        "limit" => limit,
+        "skip" => skip,
+    )
+
+    if !isnothing(extra_filter)
+        query["where"] = extra_filter
+    end
+
+    REST.get(api, "Jobs/status/v/1"; access_token=access_token, query=Dict("filter" => JSON.json(query))) |> REST.json
+end
+
 function create_remote_job(api::ProjectAPI, device::IBMQDevice, access_token::String; job_name=nothing, job_share_level=nothing, job_tags=nothing)
     payload = Dict{String, Any}(
         "backend" => Dict{String, Any}(
@@ -287,6 +302,10 @@ function result_url(api::JobAPI, access_token::String)
     REST.get(api, "resultDownloadUrl"; access_token=access_token) |> REST.json
 end
 
+function download_url(api::JobAPI, access_token::String)
+    REST.get(api, "jobDownloadUrl"; access_token=access_token) |> REST.json
+end
+
 function status(api::JobAPI, access_token::String)
     REST.get(api, "status/v/1"; access_token=access_token) |> REST.json
 end
@@ -301,6 +320,10 @@ end
 
 function callback_upload(api::JobAPI, access_token::String)
     REST.post(api, "jobDataUploaded"; access_token=access_token) |> REST.json
+end
+
+function callback_download(api::JobAPI, access_token::String)
+    REST.post(api, "resultDownloaded"; access_token=access_token) |> REST.json
 end
 
 function submit(api::ProjectAPI, device::IBMQDevice, qobj::Dict{String, Any}, access_token::String; kw...)
@@ -328,4 +351,10 @@ function submit(api::ProjectAPI, device::IBMQDevice, qobj::Dict{String, Any}, ac
             rethrow(e)
         end
     end
+    return
+end
+
+struct Job
+    api::JobAPI
+    access_token::String
 end

@@ -26,15 +26,4 @@ ex = eval(Meta.parse(ex))
 qobj = IBMQClient.create_qobj(devices[3], ex)
 IBMQClient.submit(project, devices[3], qobj, access_token)
 
-job = IBMQClient.JobAPI(project, job_id)
-IBMQClient.upload_url(job, access_token)
-IBMQClient.retreive_job_info(job, access_token)
-IBMQClient.properties(job, access_token)
-IBMQClient.result_url(job, access_token)
-IBMQClient.status(job, access_token)
-
-IBMQClient.put_object_storage(job, upload_url, qobj, access_token)
-response = IBMQClient.callback_upload(job, access_token)
-
-
-# IBMQClient.cancel(job, access_token)
+jobs = IBMQClient.jobs(project, access_token)
