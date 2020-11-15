@@ -3,6 +3,11 @@ const Maybe{T} = Union{Nothing, T}
 "abstract REST API type for IBM Q"
 abstract type IBMQAPI <: REST.AbstractAPI end
 
+"""
+    create_headers(api::IBMQAPI[, headers=HTTP.Header[]; kw...])
+
+Create headers for a IBMQ REST API object.
+"""
 function create_headers(::IBMQAPI, headers=HTTP.Header[]; kw...)
     headers = HTTP.mkheaders(headers)
     # insert headers
@@ -44,37 +49,82 @@ end
 # unlike qiskit we want to distinguish and error when
 # method does not exist in certain REST API endpoint.
 
+"""
+    AuthAPI <: IBMQAPI
+
+IBM Q Authentication REST API.
+"""
 Base.@kwdef struct AuthAPI <: IBMQAPI
     endpoint::URI = URI("https://auth.quantum-computing.ibm.com/api")
 end
 
+"""
+    login(::AuthAPI, token::String)
+
+Login with user token.
+"""
 function login(api::AuthAPI, token::String)
     return REST.post(api, "users/loginWithToken", Dict("apiToken" => token)) |> REST.json
 end
 
+"""
+    user_info(::AuthAPI, access_token::String)
+
+Get user info of given IBM Q account access token.
+"""
 function user_info(api::AuthAPI, access_token::String)
     return REST.get(api, "users/me"; access_token=access_token) |> REST.json
 end
 
+"""
+    user_urls(::AuthAPI, access_token::String)
+
+Get user urls to create services etc.
+"""
 function user_urls(api::AuthAPI, access_token::String)
     return user_info(api, access_token)["urls"]
 end
 
+"""
+    ServiceAPI <: IBMQAPI
+
+IBM Q service REST API.
+"""
 struct ServiceAPI <: IBMQAPI
     endpoint::URI
 end
 
+"""
+    ServiceAPI([uri="https://api.quantum-computing.ibm.com/api"])
+
+Create IBM Q service REST API object.
+"""
 ServiceAPI() = ServiceAPI("https://api.quantum-computing.ibm.com/api")
 ServiceAPI(uri::String) = ServiceAPI(URI(uri))
 
+"""
+    ServiceAPI(::AuthAPI, access_token::String)
+
+Create IBM Q service REST API by querying authentication server.
+"""
 function ServiceAPI(auth::AuthAPI, access_token::String)
     return ServiceAPI(URI(user_urls(auth, access_token)["http"]))
 end
 
+"""
+    hubs(api::ServiceAPI, access_token::String)
+
+Get alll IBM hubs.
+"""
 function hubs(api::ServiceAPI, access_token::String)
     return REST.get(api, "Network"; access_token=access_token) |> REST.json
 end
 
+"""
+    user_hubs(api::ServiceAPI, access_token::String)
+
+Get given users' hubs.
+"""
 function user_hubs(api::ServiceAPI, access_token::String)
     ret_hubs = NamedTuple{(:hub, :group, :project), NTuple{3, String}}[]
     for hub in hubs(api, access_token)
@@ -96,10 +146,20 @@ function user_hubs(api::ServiceAPI, access_token::String)
 end
 
 # this is similar to Account class in qiskit
+"""
+    ProjectAPI <: IBMQAPI
+
+IBM Q Project REST API.
+"""
 struct ProjectAPI <: IBMQAPI
     endpoint::URI
 end
 
+"""
+    ProjectAPI(base, hub::String, group::String, project::String)
+
+Create IBM Q Project REST API from given base uri, `hub`, `group` and project name `project`.
+"""
 function ProjectAPI(base::URI, hub::String, group::String, project::String)
     return ProjectAPI(base.uri, hub, group, project)
 end
@@ -122,6 +182,7 @@ struct GateInfo
     qasm::String
     couping_map::Union{Nothing, Vector{Vector{Int}}}
 end
+
 
 function GateInfo(d::Dict)
     return GateInfo(d["name"], d["parameters"], d["qasm_def"], Base.get(d, "coupling_map", nothing))
@@ -193,11 +254,27 @@ function Base.show(io::IO, d::IBMQDevice)
     _print_item(io, "version", d.version)
 end
 
+"""
+    devices(api::ProjectAPI, access_token::String; timeout = 0)
+
+Query available devices.
+"""
 function devices(api::ProjectAPI, access_token::String; timeout = 0)
     raw_devs = REST.get(api, "devices/v/1"; readtimeout = timeout, access_token = access_token) |> REST.json
     return [IBMQDevice(dev) for dev in raw_devs]
 end
 
+"""
+    jobs(api::ProjectAPI, access_token::String; descending::Bool=true, limit::Int=10, skip::Int=0, extra_filter=nothing)
+
+Query available jobs. 
+
+## Args
+- `limit`: Maximum number of items to return.
+- `skip`: Offset for the items to return.
+- `descending`: Whether the jobs should be in descending order.
+- `extra_filter`: Additional filtering passed to the query.
+"""
 function jobs(api::ProjectAPI, access_token::String; descending::Bool=true, limit::Int=10, skip::Int=0, extra_filter=nothing)
     order = descending ? "DESC" : "ASC"
     query = Dict{String, Any}(
@@ -213,6 +290,18 @@ function jobs(api::ProjectAPI, access_token::String; descending::Bool=true, limi
     REST.get(api, "Jobs/status/v/1"; access_token=access_token, query=Dict("filter" => JSON.json(query))) |> REST.json
 end
 
+"""
+    create_remote_job(api::ProjectAPI, device::IBMQDevice, access_token::String; job_name=nothing, job_share_level=nothing, job_tags=nothing)
+
+Create a job instance on the remote server.
+
+## Args
+
+- `device`: A IBM Q device object.
+- `job_name`: Custom name to be assigned to the job.
+- `job_share_level`: Level the job should be shared at.
+- `job_tags`: Tags to be assigned to the job.
+"""
 function create_remote_job(api::ProjectAPI, device::IBMQDevice, access_token::String; job_name=nothing, job_share_level=nothing, job_tags=nothing)
     payload = Dict{String, Any}(
         "backend" => Dict{String, Any}(
