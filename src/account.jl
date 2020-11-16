@@ -17,7 +17,13 @@ function AccountInfo(token::String)
     return AccountInfo(access_token, info, auth, service, project)
 end
 
+# TODO: forward other REST APIs
+user_urls(x::AccountInfo) = user_urls(x.auth, x.access_token)
+hubs(x::AccountInfo) = hubs(x.service, x.access_token)
+user_hubs(x::AccountInfo) = user_hubs(x.service, x.access_token)
 devices(x::AccountInfo) = devices(x.project, x.access_token)
+jobs(x::AccountInfo; kw...) = jobs(x.project, x.access_token; kw...)
+create_remote_job(x::AccountInfo, dev::IBMQDevice; kw...) = create_remote_job(x.project, dev, x.access_token; kw...)
 
 function Base.show(io::IO, ::MIME"text/plain", x::AccountInfo)
     indent = get(io, :indent, 0)
