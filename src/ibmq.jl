@@ -1,3 +1,5 @@
+export AuthAPI, ServiceAPI, ProjectAPI, JobAPI
+
 const Maybe{T} = Union{Nothing, T}
 
 "abstract REST API type for IBM Q"

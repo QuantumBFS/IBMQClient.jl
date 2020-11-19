@@ -123,9 +123,9 @@ uuid = "ca575930-c2e3-43a9-ace4-1e988b2c1908"
 
 [[OpenQASM]]
 deps = ["RBNF"]
-git-tree-sha1 = "1c99778e7f48aa0e3b98bd4fa8c49bf1ba13e127"
+git-tree-sha1 = "1e3ad760ac46117e58a52a4047cd1f9e09fa080e"
 uuid = "a8821629-a4c0-4df7-9e00-12969ff383a7"
-version = "0.1.0"
+version = "2.0.0"
 
 [[OrderedCollections]]
 git-tree-sha1 = "cf59cfed2e2c12e8a2ff0a4f1e9b2cd8650da6db"
@@ -199,9 +199,7 @@ deps = ["InteractiveUtils", "Logging", "Random", "Serialization"]
 uuid = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [[URIs]]
-git-tree-sha1 = "0ee784c1bb4f652c187d67519123b9b928475cad"
-repo-rev = "joinpath"
-repo-url = "https://github.com/Roger-luo/URIs.jl.git"
+git-tree-sha1 = "34091d6a4d65f80d4366a13030e415d5080a6345"
 uuid = "5c2747f8-b7ea-4ff2-ba2e-563bfd36b1d4"
 version = "1.0.1"
 
