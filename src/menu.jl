@@ -1,13 +1,12 @@
-mutable struct DeviceMenu{D, C} <: TerminalMenus._ConfiguredMenu{C}
+mutable struct DeviceMenu{D} <: TerminalMenus.AbstractMenu
     options::Vector{D}
     pagesize::Int
     indent::Int
     pageoffset::Int
     selected::Int
-    config::C
 end
 
-function DeviceMenu(devices::Vector; pagesize::Int=5, warn::Bool=true, kwargs...)
+function DeviceMenu(devices::Vector; pagesize::Int=5, warn::Bool=true)
     length(devices) < 1 && error("DeviceMenu must have at least one option")
     pagesize < 4 && error("minimum pagesize must be larger than 4")
     pagesize = pagesize == -1 ? length(devices) : pagesize
@@ -19,7 +18,7 @@ function DeviceMenu(devices::Vector; pagesize::Int=5, warn::Bool=true, kwargs...
     pageoffset = 0
     selected = -1 # none
     indent = maximum(x->length(x.name), devices) + 2
-    return DeviceMenu(devices, pagesize, indent, pageoffset, selected, TerminalMenus.Config(;kwargs...))
+    return DeviceMenu(devices, pagesize, indent, pageoffset, selected)
 end
 
 function TerminalMenus.options(m::DeviceMenu)
