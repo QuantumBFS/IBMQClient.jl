@@ -32,7 +32,7 @@ function TerminalMenus.pick(m::DeviceMenu, cursor::Int)
     return true #break out of the menu
 end
 
-@static if VERSION > "1.6-"
+@static if VERSION > v"1.6-"
 
 function TerminalMenus.printmenu(out::IO, m::DeviceMenu, cursoridx::Int; oldstate=nothing, init::Bool=false)
     buf = IOBuffer()
