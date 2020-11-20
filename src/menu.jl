@@ -32,8 +32,6 @@ function TerminalMenus.pick(m::DeviceMenu, cursor::Int)
     return true #break out of the menu
 end
 
-@static if VERSION > v"1.6-"
-
 function TerminalMenus.printmenu(out::IO, m::DeviceMenu, cursoridx::Int; oldstate=nothing, init::Bool=false)
     buf = IOBuffer()
     lastoption = length(m.options)
@@ -67,7 +65,10 @@ function TerminalMenus.printmenu(out::IO, m::DeviceMenu, cursoridx::Int; oldstat
             print(buf, ' ')
         end
 
-        TerminalMenus.printcursor(buf, m, i == cursoridx)
+        # TODO: use 1.6's implementation when we drop 1.5
+        # TerminalMenus.printcursor(buf, m, i == cursoridx)
+        print(buf, i == cursoridx ? '→' : ' ', ' ')
+
         name = m.options[i].name
         indent = " "^(m.indent - length(name))
         device = m.options[cursoridx]
@@ -98,15 +99,4 @@ function TerminalMenus.printmenu(out::IO, m::DeviceMenu, cursoridx::Int; oldstat
     print(out, String(take!(buf)))
 
     return newstate
-end
-
-else
-
-    function writeLine(buf::IOBuffer, menu::DeviceMenu, idx::Int, cursor::Bool)
-        # print a ">" on the selected entry
-        cursor ? print(buf, TerminalMenus.CONFIG[:cursor] ," ") : print(buf, "  ")
-    
-        print(buf, menu.options[idx].name)
-    end
-
 end
