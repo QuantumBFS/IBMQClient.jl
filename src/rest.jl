@@ -6,7 +6,6 @@ using HTTP
 using JSON
 using URIs
 using Serialization
-using ..Patch: make_uri
 abstract type AbstractAPI end
 
 const mocking = Ref{Bool}(false)
@@ -68,7 +67,7 @@ function api_uri(api::AbstractAPI, path::String, query=nothing)
         return joinpath(api.endpoint, path)
     else
         isempty(uri.query) || error("non empty query in API endpoint is not supported")
-        return make_uri(joinpath(api.endpoint, path); query=query)
+        return URI(joinpath(api.endpoint, path); query=query)
     end
 end
 
