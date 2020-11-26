@@ -244,15 +244,19 @@ function _print_item(io::IO, key, value)
     print(io, indent(io, 2))
     printstyled(io, key, ": "; color=:light_blue)
     printstyled(io, value; color=:green)
+end
+
+function _println_item(io::IO, key, value)
+    _print_item(io, key, value)
     println(io)
 end
 
 function Base.show(io::IO, d::IBMQDevice)
     println(io, indent(io), "IBMQDevice:")
-    _print_item(io, "name", d.name)
-    _print_item(io, "nqubits", d.nqubits)
-    _print_item(io, "max_shots", d.max_shots)
-    _print_item(io, "credits_required", d.credits_required)
+    _println_item(io, "name", d.name)
+    _println_item(io, "nqubits", d.nqubits)
+    _println_item(io, "max_shots", d.max_shots)
+    _println_item(io, "credits_required", d.credits_required)
     _print_item(io, "version", d.version)
 end
 
@@ -340,6 +344,10 @@ function create_qobj(device::IBMQDevice, experiments::Dict...;
         if haskey(config, "memory_slots")
             memory_slots = max(config["memory_slots"], memory_slots)
         end
+
+        if haskey(config, "nshots")
+            shots = max(config["shots"], shots)
+        end
     end
 
     n_qubits > 0 || error("please specify the number of qubits")
@@ -358,6 +366,7 @@ function create_qobj(device::IBMQDevice, experiments::Dict...;
             "parametric_pulses" => parametric_pulses,
             "memory_slots" => memory_slots,
             "n_qubits" => n_qubits,
+            "shots" => shots,
         ),
         "schema_version" => schema_version,
         "type" => type,
@@ -415,37 +424,4 @@ end
 
 function callback_download(api::JobAPI, access_token::String)
     REST.post(api, "resultDownloaded"; access_token=access_token) |> REST.json
-end
-
-function submit(api::ProjectAPI, device::IBMQDevice, qobj::Dict{String, Any}, access_token::String; kw...)
-    job_info = create_remote_job(api, device, access_token; kw...)
-
-    job_id = job_info["id"]
-    upload_url = job_info["objectStorageInfo"]["uploadUrl"]
-
-    job_api = JobAPI(api, job_id)
-
-    try
-        put_object_storage(job_api, upload_url, qobj, access_token)
-        response = callback_upload(job_api, access_token)
-        return response["job"]
-    catch e
-        if e isa HTTP.ExceptionRequest.StatusError
-            try
-                cancel(job_api, access_token)
-            catch e
-                if !(e isa HTTP.ExceptionRequest.StatusError)
-                    rethrow(e)
-                end
-            end
-        else
-            rethrow(e)
-        end
-    end
-    return
-end
-
-struct Job
-    api::JobAPI
-    access_token::String
 end
