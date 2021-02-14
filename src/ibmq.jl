@@ -180,8 +180,8 @@ end
 
 struct GateInfo
     name::String
-    parameters::Vector{String}
-    qasm::String
+    parameters::Maybe{Vector{String}}
+    qasm::Maybe{String}
     couping_map::Union{Nothing, Vector{Vector{Int}}}
 end
 
