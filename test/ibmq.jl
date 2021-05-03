@@ -2,7 +2,7 @@ using Test
 using IBMQClient
 using Random
 using IBMQClient.REST
-using IBMQClient: IBMQDevice, GateInfo
+using IBMQClient.Schema
 
 token = randstring(40)
 access_token = randstring(40)
@@ -41,26 +41,15 @@ api = ProjectAPI("https://qc.ibm.com/", "test_hub", "test_group", "test_project"
     @test ("X-Access-Token"=>access_token) in response[:headers]
 end
 
+fake_dev = DeviceInfo(;
+    backend_name="fake",
+    n_qubits=10,
+    backend_version=v"1.2.2",
+    description="",
+    gates=GateInfo[],
+)
 
-
-fake_dev = IBMQDevice(;
-        name="fake",
-        description="",
-        credits_required=false,
-        remote=false,
-        simulator=true,
-        version="1.2.2",
-        nqubits=10,
-        gates=GateInfo[],
-        basis_gates=String[],
-        open_pulse=false,
-        max_shots=1024,
-        quantum_volume=10,
-        support_instructions=String[],
-        raw=Dict(),
-    )
-
-@test_request IBMQClient.create_remote_job(api, fake_dev, access_token) begin
+@test_request IBMQClient.create_remote_job(api, fake_dev.backend_name, access_token) begin
     @test response[:method] == "POST"
     @test response[:body] == "{\"backend\":{\"name\":\"fake\"},\"allowObjectStorage\":true}"
     @test response[:uri] == URI("https://@qc.ibm.com:/Network/test_hub/Groups/test_group/Projects/test_project/Jobs?#")
