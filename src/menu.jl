@@ -1,12 +1,12 @@
-mutable struct DeviceMenu{D} <: TerminalMenus.AbstractMenu
-    options::Vector{D}
+mutable struct DeviceMenu <: TerminalMenus.AbstractMenu
+    options::Vector{Schema.DeviceInfo}
     pagesize::Int
     indent::Int
     pageoffset::Int
     selected::Int
 end
 
-function DeviceMenu(devices::Vector; pagesize::Int=5, warn::Bool=true)
+function DeviceMenu(devices::Vector{Schema.DeviceInfo}; pagesize::Int=5, warn::Bool=true)
     length(devices) < 1 && error("DeviceMenu must have at least one option")
     pagesize < 4 && error("minimum pagesize must be larger than 4")
     pagesize = pagesize == -1 ? length(devices) : pagesize
@@ -17,7 +17,7 @@ function DeviceMenu(devices::Vector; pagesize::Int=5, warn::Bool=true)
 
     pageoffset = 0
     selected = -1 # none
-    indent = maximum(x->length(x.name), devices) + 2
+    indent = maximum(x->length(x.backend_name), devices) + 2
     return DeviceMenu(devices, pagesize, indent, pageoffset, selected)
 end
 
@@ -69,7 +69,7 @@ function TerminalMenus.printmenu(out::IO, m::DeviceMenu, cursoridx::Int; oldstat
         # TerminalMenus.printcursor(buf, m, i == cursoridx)
         print(buf, i == cursoridx ? '→' : ' ', ' ')
 
-        name = m.options[i].name
+        name = m.options[i].backend_name
         indent = " "^(m.indent - length(name))
         device = m.options[cursoridx]
 
@@ -77,7 +77,7 @@ function TerminalMenus.printmenu(out::IO, m::DeviceMenu, cursoridx::Int; oldstat
         print(buf, GREEN_FG(name))
  
         if line_idx == 1
-            print(buf, indent, LIGHT_BLUE_FG("nqubits: "), GREEN_FG(string(device.nqubits)))
+            print(buf, indent, LIGHT_BLUE_FG("nqubits: "), GREEN_FG(string(device.n_qubits)))
         elseif line_idx == 2
             print(buf, indent, LIGHT_BLUE_FG("max_shots: "), GREEN_FG(string(device.max_shots)))
         elseif line_idx == 3
