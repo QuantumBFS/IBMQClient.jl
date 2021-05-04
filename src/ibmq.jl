@@ -15,16 +15,6 @@ function read_token(qiskitrc::String=expanduser("~/.qiskit/qiskitrc"))
 end
 
 """
-    login([qiskitrc::String="~/.qiskit/qiskitrc"])
-
-Login from local `qiskitrc` cache.
-"""
-function login(qiskitrc::String=expanduser("~/.qiskit/qiskitrc"))
-    rc = from_toml(QiskitRC, qiskitrc)
-    return login(AuthAPI(URI(rc.ibmq.url)), rc.ibmq.token)
-end
-
-"""
     struct AccountInfo
 
     AccountInfo([token=read_token()])
