@@ -203,10 +203,6 @@ function ibmq_template_hubs(hub::String, group::String, project::String)
     return "/Network/$hub/Groups/$group/Projects/$project"
 end
 
-function indent(io::IO, offset=0)
-    return " "^(Base.get(io, :indent, 0) + offset)
-end
-
 """
     devices(api::ProjectAPI, access_token::String; timeout = 0)
 
