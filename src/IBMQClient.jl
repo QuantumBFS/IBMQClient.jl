@@ -17,12 +17,6 @@ include("rest.jl")
 include("adapters.jl")
 
 include("ibmq.jl")
-# include("account.jl")
-
-@static if VERSION > v"1.6-"
-    include("menu.jl")
-else
-    include("menu.old.jl")
-end
+include("menu.jl")
 
 end
