@@ -1,19 +1,17 @@
 # NOTE:
 # unlike qiskit we want to distinguish and error when
 # method does not exist in certain REST API endpoint.
-@option struct IBMQRC
-    token::String
-    url::String = "https://auth.quantum-computing.ibm.com/api"
-    verify::Bool = true
-end
 
-@option struct QiskitRC
-    ibmq::IBMQRC
-end
+"""
+    read_token(qiskitrc::String[=expanduser("~/.qiskit/qiskitrc")])
 
+Read IBMQ API token from `.qiskit/qiskitrc` file. Default location is
+`~/.qiskit/qiskitrc`.
+"""
 function read_token(qiskitrc::String=expanduser("~/.qiskit/qiskitrc"))
-    d = from_toml(QiskitRC, qiskitrc)
-    return d.ibmq.token
+    conf = ConfParse(qiskitrc)
+    parse_conf!(conf)
+    return retrieve(conf, "ibmq", "token")
 end
 
 """

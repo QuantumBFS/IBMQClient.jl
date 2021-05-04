@@ -1,4 +1,5 @@
 using Test
+using IBMQClient
 
 @testset "schema" begin
     include("schema.jl")

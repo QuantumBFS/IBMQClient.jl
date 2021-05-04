@@ -1,0 +1,4 @@
+[ibmq]
+token = pg3PIrchJpDoyv7cl5GedjE4Q86NuKyriLIIN3SskWMlNDIgnAHALINT8jWgyIdNiEWURUnp2qjr0T4ooP5T60DxejmhbeVFbt1fTeIUlNQPSIbc637GShmhc4xqD65b
+url = https://auth.quantum-computing.ibm.com/api
+verify = True

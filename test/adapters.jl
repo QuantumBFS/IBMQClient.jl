@@ -6,6 +6,7 @@ using IBMQClient.Schema
 using BrokenRecord
 
 token = "pg3PIrchJpDoyv7cl5GedjE4Q86NuKyriLIIN3SskWMlNDIgnAHALINT8jWgyIdNiEWURUnp2qjr0T4ooP5T60DxejmhbeVFbt1fTeIUlNQPSIbc637GShmhc4xqD65b"
+@test IBMQClient.read_token(joinpath(pkgdir(IBMQClient), "test", ".qiskit", "qiskitrc")) == token
 BrokenRecord.configure!(path=joinpath(pkgdir(IBMQClient), "test", "records"), ignore_query=["apiToken"], ignore_headers=["X-Access-Token", "apiToken"])
 
 account = playback("account.json") do
