@@ -1,0 +1,120 @@
+{
+  "responses": [
+    {
+      "headers": [
+        {
+          "Date": "Tue, 04 May 2021 11:28:12 GMT"
+        },
+        {
+          "Content-Type": "application/json; charset=utf-8"
+        },
+        {
+          "Transfer-Encoding": "chunked"
+        },
+        {
+          "Connection": "keep-alive"
+        },
+        {
+          "Set-Cookie": "__cfduid=d61a67c0b4b5348691bc0f0cee30f5a4a1620127690; expires=Thu, 03-Jun-21 11:28:10 GMT; path=/; domain=.quantum-computing.ibm.com; HttpOnly; SameSite=Lax"
+        },
+        {
+          "Vary": "Origin, Accept-Encoding"
+        },
+        {
+          "Access-Control-Allow-Credentials": "true"
+        },
+        {
+          "Access-Control-Expose-Headers": "x-total-count"
+        },
+        {
+          "X-XSS-Protection": "1; mode=block"
+        },
+        {
+          "X-Frame-Options": "SAMEORIGIN"
+        },
+        {
+          "Strict-Transport-Security": "max-age=15724800; includeSubDomains"
+        },
+        {
+          "X-Download-Options": "noopen"
+        },
+        {
+          "X-Content-Type-Options": "nosniff"
+        },
+        {
+          "Surrogate-Control": "no-store"
+        },
+        {
+          "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate"
+        },
+        {
+          "Pragma": "no-cache"
+        },
+        {
+          "Expires": "0"
+        },
+        {
+          "uber-trace-id": "dc591b38166dea3a:dc591b38166dea3a:0:1"
+        },
+        {
+          "X-RateLimit-Limit": "50"
+        },
+        {
+          "X-RateLimit-Remaining": "49"
+        },
+        {
+          "X-RateLimit-Reset": "1620127692"
+        },
+        {
+          "ETag": "W/\"17b3-VKgluTBn5wS6nMZIDEdmkZzxWWY\""
+        },
+        {
+          "CF-Cache-Status": "DYNAMIC"
+        },
+        {
+          "cf-request-id": "09d8bbc88e00005e9632a22000000001"
+        },
+        {
+          "Expect-CT": "max-age=604800, report-uri=\"https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct\""
+        },
+        {
+          "Server": "cloudflare"
+        },
+        {
+          "CF-RAY": "64a162541a465e96-IAD"
+        }
+      ],
+      "body": "[{\"name\":\"ibm-q-research\",\"title\":\"IBM Quantum Research\",\"description\":\"Open access to support the quantum computing research community with more resources than the general public.\",\"creationDate\":\"2019-08-19T17:59:42.532Z\",\"deleted\":false,\"private\":false,\"licenseNotRequired\":false,\"isDefault\":false,\"analytics\":true,\"class\":\"Community\",\"id\":\"5d5ae38e39c23d00191cad15\",\"groups\":{\"independent-8\":{\"title\":\"independent-8\",\"name\":\"independent-8\",\"projects\":{\"main\":{\"title\":\"main\",\"name\":\"main\",\"users\":{\"5ddc5f2f6b72bd00113d2722\":{\"deleted\":false,\"email\":\"Hagenes.Morris@gmail.com\",\"name\":\"Roger Luo\",\"dateJoined\":\"2021-01-26T23:18:16.879Z\"}},\"devices\":{\"5ba502d0986f16003ea56c87\":{\"priority\":1,\"name\":\"ibmq_16_melbourne\",\"deleted\":false,\"configuration\":{\"limit\":-1,\"capabilities\":{\"maxExperiments\":75,\"maxShots\":8192}}},\"5db85d4c079e5f1b2117b303\":{\"priority\":1,\"name\":\"ibmq_armonk\",\"deleted\":false,\"configuration\":{\"limit\":-1,\"capabilities\":{\"openPulse\":true,\"maxExperiments\":75,\"maxShots\":8192}}},\"5e7ca123ef0935c3e8d138b7\":{\"priority\":1,\"name\":\"ibmq_athens\",\"deleted\":false,\"configuration\":{\"limit\":-1,\"capabilities\":{\"maxExperiments\":75,\"maxShots\":8192}}},\"5edb5a7044afa23d6ed14294\":{\"priority\":1,\"name\":\"ibmq_bogota\",\"deleted\":false,\"configuration\":{\"limit\":-1,\"capabilities\":{\"maxExperiments\":900,\"maxShots\":8192,\"openPulse\":true}},\"modes\":{\"dedicated\":{\"minTimeSlot\":15,\"maxTimeSlot\":180,\"maxTimeToBook\":180}}},\"5f47cc94f9150a001a079449\":{\"priority\":1,\"name\":\"ibmq_casablanca\",\"deleted\":false,\"configuration\":{\"limit\":-1,\"capabilities\":{\"maxExperiments\":900,\"maxShots\":8192,\"openPulse\":true}},\"modes\":{\"dedicated\":{\"minTimeSlot\":15,\"maxTimeSlot\":180,\"maxTimeToBook\":180}}},\"5ae875670f020500393162ad\":{\"priority\":1,\"name\":\"ibmq_qasm_simulator\",\"deleted\":false,\"configuration\":{\"limit\":-1,\"capabilities\":{\"maxExperiments\":300,\"maxShots\":8192}}},\"5e7ca34def0935c3e8e37460\":{\"priority\":1,\"name\":\"ibmq_rome\",\"deleted\":false,\"configuration\":{\"limit\":-1,\"capabilities\":{\"maxExperiments\":900,\"maxShots\":8192,\"openPulse\":true}},\"modes\":{\"dedicated\":{\"minTimeSlot\":15,\"maxTimeSlot\":180,\"maxTimeToBook\":180}}},\"5edb5a5e44afa23d6ed14290\":{\"priority\":1,\"name\":\"ibmq_santiago\",\"deleted\":false,\"configuration\":{\"limit\":-1,\"capabilities\":{\"maxExperiments\":75,\"maxShots\":8192}}},\"5ae875670f020500393162da\":{\"priority\":1,\"name\":\"ibmqx2\",\"deleted\":false,\"configuration\":{\"limit\":-1,\"capabilities\":{\"maxExperiments\":75,\"maxShots\":8192}}},\"60103afaca625b70a5b1694c\":{\"priority\":1,\"name\":\"ibmq_quito\",\"deleted\":false,\"configuration\":{\"limit\":-1,\"capabilities\":{\"maxExperiments\":75,\"maxShots\":8192}}},\"60103abcca625b70a5b16943\":{\"priority\":1,\"name\":\"ibmq_lima\",\"deleted\":false,\"configuration\":{\"limit\":-1,\"capabilities\":{\"maxExperiments\":75,\"maxShots\":8192}}},\"60103adeca625b70a5b16948\":{\"priority\":1,\"name\":\"ibmq_belem\",\"deleted\":false,\"configuration\":{\"limit\":-1,\"capabilities\":{\"maxExperiments\":75,\"maxShots\":8192}}},\"60427c0cfd7d013b65e51e2d\":{\"priority\":1,\"name\":\"simulator_stabilizer\",\"deleted\":false,\"configuration\":{\"limit\":-1,\"capabilities\":{\"maxExperiments\":300,\"maxShots\":8192}}},\"60427b82fd7d013b65e51e2b\":{\"priority\":1,\"name\":\"simulator_mps\",\"deleted\":false,\"configuration\":{\"limit\":-1,\"capabilities\":{\"maxExperiments\":300,\"maxShots\":8192}}},\"60427bc8fd7d013b65e51e2c\":{\"priority\":1,\"name\":\"simulator_extended_stabilizer\",\"deleted\":false,\"configuration\":{\"limit\":-1,\"capabilities\":{\"maxExperiments\":300,\"maxShots\":8192}}},\"60427b19fd7d013b65e51e2a\":{\"priority\":1,\"name\":\"simulator_statevector\",\"deleted\":false,\"configuration\":{\"limit\":-1,\"capabilities\":{\"maxExperiments\":300,\"maxShots\":8192}}}}}}}}},{\"name\":\"ibm-q\",\"title\":\"IBM Quantum\",\"description\":\"Open access quantum systems. Jobs sent to these systems are processed in the United States.\",\"creationDate\":\"2019-05-05T00:28:10.601Z\",\"deleted\":false,\"private\":false,\"licenseNotRequired\":false,\"isDefault\":true,\"analytics\":false,\"class\":\"Open\",\"id\":\"5cce18331b339b17b4734f98\",\"ownerId\":\"5b27a47e8551ba667d96c787\",\"device\":[\"ibmqx4\",\"ibmqx2\",\"ibmq_qasm_simulator\"],\"priority\":1,\"groups\":{\"open\":{\"name\":\"open\",\"title\":\"open\",\"isDefault\":true,\"description\":\"\",\"creationDate\":\"2019-05-05T00:28:30.040Z\",\"deleted\":false,\"projects\":{\"main\":{\"name\":\"main\",\"title\":\"main\",\"isDefault\":true,\"description\":\"\",\"creationDate\":\"2019-05-05T00:28:49.312Z\",\"deleted\":false,\"devices\":{\"5ae875670f020500393162ad\":{\"priority\":1,\"name\":\"ibmq_qasm_simulator\",\"deleted\":false},\"5ba502d0986f16003ea56c87\":{\"priority\":1,\"deleted\":false,\"name\":\"ibmq_16_melbourne\"},\"5ae875670f020500393162da\":{\"priority\":1,\"deleted\":false,\"name\":\"ibmqx2\"},\"5db85d4c079e5f1b2117b303\":{\"priority\":1,\"name\":\"ibmq_armonk\",\"deleted\":false,\"specificConfiguration\":{\"open_pulse\":true},\"configuration\":{\"capabilities\":{\"openPulse\":true}}},\"5edb5a5e44afa23d6ed14290\":{\"priority\":1,\"name\":\"ibmq_santiago\",\"deleted\":false,\"configuration\":{\"limit\":-1,\"capabilities\":{\"openPulse\":false}}},\"5e7ca123ef0935c3e8d138b7\":{\"priority\":1,\"name\":\"ibmq_athens\",\"deleted\":false,\"configuration\":{\"limit\":-1,\"capabilities\":{\"openPulse\":false}}},\"60103afaca625b70a5b1694c\":{\"priority\":1,\"name\":\"ibmq_quito\",\"deleted\":false,\"configuration\":{\"limit\":-1,\"capabilities\":{\"openPulse\":false}}},\"60103abcca625b70a5b16943\":{\"priority\":1,\"name\":\"ibmq_lima\",\"deleted\":false,\"configuration\":{\"limit\":-1,\"capabilities\":{\"openPulse\":false}}},\"60103adeca625b70a5b16948\":{\"priority\":1,\"name\":\"ibmq_belem\",\"deleted\":false,\"configuration\":{\"limit\":-1,\"capabilities\":{\"openPulse\":false}}},\"60427bc8fd7d013b65e51e2c\":{\"priority\":1,\"name\":\"simulator_extended_stabilizer\",\"deleted\":false,\"configuration\":{\"limit\":-1,\"capabilities\":{\"openPulse\":false}}},\"60427b82fd7d013b65e51e2b\":{\"priority\":1,\"name\":\"simulator_mps\",\"deleted\":false,\"configuration\":{\"limit\":-1,\"capabilities\":{\"openPulse\":false}}},\"60427b19fd7d013b65e51e2a\":{\"priority\":1,\"name\":\"simulator_statevector\",\"deleted\":false,\"configuration\":{\"limit\":-1,\"capabilities\":{\"openPulse\":false}}},\"60427c0cfd7d013b65e51e2d\":{\"priority\":1,\"name\":\"simulator_stabilizer\",\"deleted\":false,\"configuration\":{\"limit\":-1,\"capabilities\":{\"openPulse\":false}}}}}}}}}]",
+      "status": 200,
+      "request": {
+        "txcount": 1,
+        "headers": [
+          {
+            "X-Qx-Client-Application": "IBMQClient.jl"
+          },
+          {
+            "Connection": "keep-alive"
+          },
+          {
+            "Accept": "*/*"
+          },
+          {
+            "Host": "api-qcon.quantum-computing.ibm.com"
+          },
+          {
+            "User-Agent": "HTTP.jl/1.6.1"
+          },
+          {
+            "Content-Length": "0"
+          }
+        ],
+        "body": "",
+        "method": "GET",
+        "target": "/api/Network",
+        "version": "1.1.0"
+      },
+      "version": "1.1.0"
+    }
+  ],
+  "format": "1.0.0"
+}

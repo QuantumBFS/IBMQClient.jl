@@ -1,0 +1,414 @@
+{
+  "responses": [
+    {
+      "headers": [
+        {
+          "Date": "Tue, 04 May 2021 11:45:45 GMT"
+        },
+        {
+          "Content-Type": "application/json; charset=utf-8"
+        },
+        {
+          "Content-Length": "384"
+        },
+        {
+          "Connection": "keep-alive"
+        },
+        {
+          "Set-Cookie": "__cfduid=d29e5f2ecfad642842ac3365e754573801620128745; expires=Thu, 03-Jun-21 11:45:45 GMT; path=/; domain=.quantum-computing.ibm.com; HttpOnly; SameSite=Lax"
+        },
+        {
+          "Vary": "Origin, Accept-Encoding"
+        },
+        {
+          "Access-Control-Allow-Credentials": "true"
+        },
+        {
+          "Access-Control-Expose-Headers": "x-total-count"
+        },
+        {
+          "X-XSS-Protection": "1; mode=block"
+        },
+        {
+          "X-Frame-Options": "SAMEORIGIN"
+        },
+        {
+          "Strict-Transport-Security": "max-age=15724800; includeSubDomains"
+        },
+        {
+          "X-Download-Options": "noopen"
+        },
+        {
+          "X-Content-Type-Options": "nosniff"
+        },
+        {
+          "Surrogate-Control": "no-store"
+        },
+        {
+          "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate"
+        },
+        {
+          "Pragma": "no-cache"
+        },
+        {
+          "Expires": "0"
+        },
+        {
+          "uber-trace-id": "7a3135fa9f0e4f47:7a3135fa9f0e4f47:0:1"
+        },
+        {
+          "X-RateLimit-Limit": "50"
+        },
+        {
+          "X-RateLimit-Remaining": "49"
+        },
+        {
+          "X-RateLimit-Reset": "1620128747"
+        },
+        {
+          "ETag": "W/\"180-tFv9ruisBP2mfKOBdoL2zItcTYE\""
+        },
+        {
+          "CF-Cache-Status": "DYNAMIC"
+        },
+        {
+          "cf-request-id": "09d8cbe0d60000597aa2ba9000000001"
+        },
+        {
+          "Expect-CT": "max-age=604800, report-uri=\"https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct\""
+        },
+        {
+          "Server": "cloudflare"
+        },
+        {
+          "CF-RAY": "64a17c148e5c597a-IAD"
+        }
+      ],
+      "body": "{\"kind\":\"q-object-external-storage\",\"backend\":{\"id\":\"5ae875670f020500393162ad\",\"name\":\"ibmq_qasm_simulator\"},\"status\":\"COMPLETED\",\"creationDate\":\"2021-05-04T11:34:58.965Z\",\"hubInfo\":{\"hub\":{\"name\":\"ibm-q\"},\"group\":{\"name\":\"open\"},\"project\":{\"name\":\"main\"}},\"endDate\":\"2021-05-04T11:35:03.089Z\",\"runMode\":\"fairshare\",\"id\":\"609131631355905234476870\",\"userId\":\"5ddc5f2f6b72bd00113d2722\"}",
+      "status": 200,
+      "request": {
+        "txcount": 1,
+        "headers": [
+          {
+            "X-Qx-Client-Application": "IBMQClient.jl"
+          },
+          {
+            "Connection": "keep-alive"
+          },
+          {
+            "Accept": "*/*"
+          },
+          {
+            "Host": "api-qcon.quantum-computing.ibm.com"
+          },
+          {
+            "User-Agent": "HTTP.jl/1.6.1"
+          },
+          {
+            "Content-Length": "0"
+          }
+        ],
+        "body": "",
+        "method": "GET",
+        "target": "/api/Network/ibm-q/Groups/open/Projects/main/Jobs/609131631355905234476870/status/v/1",
+        "version": "1.1.0"
+      },
+      "version": "1.1.0"
+    },
+    {
+      "headers": [
+        {
+          "Date": "Tue, 04 May 2021 11:45:46 GMT"
+        },
+        {
+          "Content-Type": "application/json; charset=utf-8"
+        },
+        {
+          "Content-Length": "422"
+        },
+        {
+          "Connection": "keep-alive"
+        },
+        {
+          "Set-Cookie": "__cfduid=d29e5f2ecfad642842ac3365e754573801620128745; expires=Thu, 03-Jun-21 11:45:45 GMT; path=/; domain=.quantum-computing.ibm.com; HttpOnly; SameSite=Lax"
+        },
+        {
+          "Vary": "Origin, Accept-Encoding"
+        },
+        {
+          "Access-Control-Allow-Credentials": "true"
+        },
+        {
+          "Access-Control-Expose-Headers": "x-total-count"
+        },
+        {
+          "X-XSS-Protection": "1; mode=block"
+        },
+        {
+          "X-Frame-Options": "SAMEORIGIN"
+        },
+        {
+          "Strict-Transport-Security": "max-age=15724800; includeSubDomains"
+        },
+        {
+          "X-Download-Options": "noopen"
+        },
+        {
+          "X-Content-Type-Options": "nosniff"
+        },
+        {
+          "Surrogate-Control": "no-store"
+        },
+        {
+          "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate"
+        },
+        {
+          "Pragma": "no-cache"
+        },
+        {
+          "Expires": "0"
+        },
+        {
+          "uber-trace-id": "200d2b1e88d77dd0:200d2b1e88d77dd0:0:1"
+        },
+        {
+          "X-RateLimit-Limit": "50"
+        },
+        {
+          "X-RateLimit-Remaining": "49"
+        },
+        {
+          "X-RateLimit-Reset": "1620128747"
+        },
+        {
+          "ETag": "W/\"1a6-0o8MC8qN48rwmQkX3RxM14kfcG0\""
+        },
+        {
+          "CF-Cache-Status": "DYNAMIC"
+        },
+        {
+          "cf-request-id": "09d8cbe1b60000597a849ce000000001"
+        },
+        {
+          "Expect-CT": "max-age=604800, report-uri=\"https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct\""
+        },
+        {
+          "Server": "cloudflare"
+        },
+        {
+          "CF-RAY": "64a17c15f955597a-IAD"
+        }
+      ],
+      "body": "{\"url\":\"https://s3.us-east.cloud-object-storage.appdomain.cloud/us-east-quantum-computing-user-jobs-prod/result-609131631355905234476870.json?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=21ce861c64cc417e9a95f95263ecf8f7%2F20210504%2Fus-east%2Fs3%2Faws4_request&X-Amz-Date=20210504T114546Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=6bc8a14333784f70a5a633393b85063b80a64906f1fed1cd1832c9102e683f85\"}",
+      "status": 200,
+      "request": {
+        "txcount": 1,
+        "headers": [
+          {
+            "X-Qx-Client-Application": "IBMQClient.jl"
+          },
+          {
+            "Connection": "keep-alive"
+          },
+          {
+            "Accept": "*/*"
+          },
+          {
+            "Host": "api-qcon.quantum-computing.ibm.com"
+          },
+          {
+            "User-Agent": "HTTP.jl/1.6.1"
+          },
+          {
+            "Content-Length": "0"
+          }
+        ],
+        "body": "",
+        "method": "GET",
+        "target": "/api/Network/ibm-q/Groups/open/Projects/main/Jobs/609131631355905234476870/resultDownloadUrl",
+        "version": "1.1.0"
+      },
+      "version": "1.1.0"
+    },
+    {
+      "headers": [
+        {
+          "Date": "Tue, 04 May 2021 11:45:46 GMT"
+        },
+        {
+          "X-Clv-Request-Id": "230bfcab-7137-47b7-8829-49ee250bc27d"
+        },
+        {
+          "Server": "Cleversafe"
+        },
+        {
+          "X-Clv-S3-Version": "2.5"
+        },
+        {
+          "Accept-Ranges": "bytes"
+        },
+        {
+          "x-amz-request-id": "230bfcab-7137-47b7-8829-49ee250bc27d"
+        },
+        {
+          "ETag": "\"f4e4b3e2e256c7f255d714f1cd666892\""
+        },
+        {
+          "Content-Type": "application/json"
+        },
+        {
+          "Last-Modified": "Tue, 04 May 2021 11:35:02 GMT"
+        },
+        {
+          "Content-Length": "1299"
+        }
+      ],
+      "body": "{\"backend_name\": \"ibmq_qasm_simulator\", \"backend_version\": \"0.8.1\", \"date\": \"2021-05-04T11:35:02.660124\", \"header\": {\"description\": \"Bell states\"}, \"job_id\": \"609131631355905234476870\", \"metadata\": {\"max_gpu_memory_mb\": 0, \"max_memory_mb\": 515872, \"mpi_rank\": 0, \"num_mpi_processes\": 1, \"omp_enabled\": true, \"parallel_experiments\": 1, \"time_taken\": 0.002888077}, \"qobj_id\": \"bell_Qobj_07272018\", \"results\": [{\"data\": {\"counts\": {\"0x0\": 506, \"0x3\": 494}}, \"header\": {\"description\": \"|11>+|00> Bell\"}, \"metadata\": {\"fusion\": {\"applied\": false, \"enabled\": true, \"max_fused_qubits\": 5, \"threshold\": 14}, \"measure_sampling\": true, \"method\": \"statevector\", \"parallel_shots\": 1, \"parallel_state_update\": 16}, \"seed_simulator\": 3112526332, \"shots\": 1000, \"status\": \"DONE\", \"success\": true, \"time_taken\": 0.0014604820000000001}, {\"data\": {\"counts\": {\"0x1\": 524, \"0x2\": 476}}, \"header\": {\"description\": \"|01>+|10> Bell\"}, \"metadata\": {\"fusion\": {\"applied\": false, \"enabled\": true, \"max_fused_qubits\": 5, \"threshold\": 14}, \"measure_sampling\": true, \"method\": \"statevector\", \"parallel_shots\": 1, \"parallel_state_update\": 16}, \"seed_simulator\": 3043966511, \"shots\": 1000, \"status\": \"DONE\", \"success\": true, \"time_taken\": 0.0012943890000000002}], \"status\": \"COMPLETED\", \"success\": true, \"time_taken\": 0.002888077}",
+      "status": 200,
+      "request": {
+        "txcount": 1,
+        "headers": [
+          {
+            "X-Qx-Client-Application": "IBMQClient.jl"
+          },
+          {
+            "Connection": "keep-alive"
+          },
+          {
+            "Accept": "*/*"
+          },
+          {
+            "Host": "s3.us-east.cloud-object-storage.appdomain.cloud"
+          },
+          {
+            "User-Agent": "HTTP.jl/1.6.1"
+          },
+          {
+            "Content-Length": "0"
+          }
+        ],
+        "body": "",
+        "method": "GET",
+        "target": "/us-east-quantum-computing-user-jobs-prod/result-609131631355905234476870.json?X-Amz-Signature=6bc8a14333784f70a5a633393b85063b80a64906f1fed1cd1832c9102e683f85&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=21ce861c64cc417e9a95f95263ecf8f7%2F20210504%2Fus-east%2Fs3%2Faws4_request&X-Amz-Date=20210504T114546Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host",
+        "version": "1.1.0"
+      },
+      "version": "1.1.0"
+    },
+    {
+      "headers": [
+        {
+          "Date": "Tue, 04 May 2021 11:45:46 GMT"
+        },
+        {
+          "Content-Type": "application/json; charset=utf-8"
+        },
+        {
+          "Content-Length": "19"
+        },
+        {
+          "Connection": "keep-alive"
+        },
+        {
+          "Set-Cookie": "__cfduid=d54dd06f187de11ee18d84d4220b798711620128746; expires=Thu, 03-Jun-21 11:45:46 GMT; path=/; domain=.quantum-computing.ibm.com; HttpOnly; SameSite=Lax"
+        },
+        {
+          "Vary": "Origin, Accept-Encoding"
+        },
+        {
+          "Access-Control-Allow-Credentials": "true"
+        },
+        {
+          "Access-Control-Expose-Headers": "x-total-count"
+        },
+        {
+          "X-XSS-Protection": "1; mode=block"
+        },
+        {
+          "X-Frame-Options": "SAMEORIGIN"
+        },
+        {
+          "Strict-Transport-Security": "max-age=15724800; includeSubDomains"
+        },
+        {
+          "X-Download-Options": "noopen"
+        },
+        {
+          "X-Content-Type-Options": "nosniff"
+        },
+        {
+          "Surrogate-Control": "no-store"
+        },
+        {
+          "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate"
+        },
+        {
+          "Pragma": "no-cache"
+        },
+        {
+          "Expires": "0"
+        },
+        {
+          "uber-trace-id": "443a2631d50bcd58:443a2631d50bcd58:0:1"
+        },
+        {
+          "X-RateLimit-Limit": "50"
+        },
+        {
+          "X-RateLimit-Remaining": "49"
+        },
+        {
+          "X-RateLimit-Reset": "1620128747"
+        },
+        {
+          "ETag": "W/\"13-phMW9GX20bWo9DMWrkiHYWVnAa8\""
+        },
+        {
+          "CF-Cache-Status": "DYNAMIC"
+        },
+        {
+          "cf-request-id": "09d8cbe42c0000597a74a6c000000001"
+        },
+        {
+          "Expect-CT": "max-age=604800, report-uri=\"https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct\""
+        },
+        {
+          "Server": "cloudflare"
+        },
+        {
+          "CF-RAY": "64a17c19d9cd597a-IAD"
+        }
+      ],
+      "body": "{\"terminated\":true}",
+      "status": 200,
+      "request": {
+        "txcount": 1,
+        "headers": [
+          {
+            "X-Qx-Client-Application": "IBMQClient.jl"
+          },
+          {
+            "Connection": "keep-alive"
+          },
+          {
+            "Accept": "*/*"
+          },
+          {
+            "Host": "api-qcon.quantum-computing.ibm.com"
+          },
+          {
+            "User-Agent": "HTTP.jl/1.6.1"
+          },
+          {
+            "Content-Length": "0"
+          }
+        ],
+        "body": "",
+        "method": "POST",
+        "target": "/api/Network/ibm-q/Groups/open/Projects/main/Jobs/609131631355905234476870/resultDownloaded",
+        "version": "1.1.0"
+      },
+      "version": "1.1.0"
+    }
+  ],
+  "format": "1.0.0"
+}

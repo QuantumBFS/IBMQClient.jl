@@ -293,7 +293,7 @@ for simulators.
 """
 @option struct ExpData <: IBMQSchema
     counts::Dict{String, Int}
-    memory::Vector{String}
+    memory::Maybe{Vector{String}} = nothing
     statevector::Maybe{Matrix{ComplexF64}} = nothing
     unitary::Maybe{Matrix{ComplexF64}} = nothing
     snapshots::Maybe{Dict{String, Any}} = nothing
@@ -322,10 +322,13 @@ the type of experiment (`"QASM"` or `"PULSE"`) and/or the type of backend (e.g.
 simulator data). See below.
 """
 @option struct ExpResult <: IBMQSchema
+    metadata::Maybe{Dict{String, Any}} = nothing
+    header::Maybe{Dict{String, Any}} = nothing
     shots::Union{Int, Vector{Int}}
     status::String
     success::Bool
-    header::Maybe{Dict{String, Any}} = nothing
+    time_taken::Float64
+    seed_simulator::Maybe{Int} = nothing
     seed::Maybe{Int} = nothing
     meas_return::Maybe{String} = nothing
     data::ExpData
@@ -344,15 +347,23 @@ The results data structure from Job.result().
 - `results`: List of `m` (number of experiments) exp result data structures (defined below).
 """
 @option struct Result <: IBMQSchema
-    backend_name::String
-    backend_version::VersionNumber
+    header::Maybe{Dict{String, Any}} = nothing
+    metadata::Maybe{Dict{String, Any}} = nothing
+    time_taken::Maybe{Float64} = nothing
     qobj_id::String
     job_id::String
+    backend_name::String
+    backend_version::VersionNumber
     date::DateTime
-    header::Maybe{Dict{String, Any}} = nothing
     status::String
     success::Bool
     results::Vector{ExpResult}
+end
+
+function Configurations.convert_to_option(::Type{Result}, ::Type{DateTime}, s::String)
+    # NOTE: we only use millisecond since Dates doesn't support 6 digits precision
+    # might worth an issue in upstream?
+    DateTime(s[1:21], dateformat"yyyy-mm-ddTHH:MM:SS.s")
 end
 
 

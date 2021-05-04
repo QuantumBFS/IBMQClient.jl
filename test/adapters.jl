@@ -1,73 +1,104 @@
 using Test
 using Random
-using Faker
-using Mocking
 using IBMQClient
 using Configurations
 using IBMQClient.Schema
+using BrokenRecord
 
-Mocking.activate()
-include("response.jl")
+token = "pg3PIrchJpDoyv7cl5GedjE4Q86NuKyriLIIN3SskWMlNDIgnAHALINT8jWgyIdNiEWURUnp2qjr0T4ooP5T60DxejmhbeVFbt1fTeIUlNQPSIbc637GShmhc4xqD65b"
+BrokenRecord.configure!(path=joinpath(pkgdir(IBMQClient), "test", "records"), ignore_query=["apiToken"], ignore_headers=["X-Access-Token", "apiToken"])
 
-patch = @patch function IBMQClient.request(api, method, path, body; kw...)
-    if api isa AuthAPI && method == "POST" && path == "users/loginWithToken"
-        return response["login"]
-    elseif api isa AuthAPI && method == "GET" && path == "users/me"
-        return response["user_info"]
-    elseif api isa ServiceAPI && method == "GET" && path == "Network"
-        return response["hubs"]
-    elseif api isa ProjectAPI && method == "GET" && path == "devices/v/1"
-        return response["devices"]
-    elseif api isa ProjectAPI && method == "GET" && path == "Jobs/status/v/1"
-        return response["jobs"]
-    end
-end
-
-account = apply(patch) do
+account = playback("account.json") do
     AccountInfo(token)
 end
 
-@test account.user_info.email == email
-@test account.access_token == access_token
-@test IBMQClient.user_urls(account) == Dict{String, Any}(
-    "services" => Dict{String, Any}(
-        "extractorsService" => "https://api.quantum-computing.ibm.com/cqc",
-        "quantumLab" => "https://notebooks.quantum-computing.ibm.com",
-        "runtime" => "https://runtime-us-east.quantum-computing.ibm.com"
-        ),
-    "http" => "https://api-qcon.quantum-computing.ibm.com/api",
-    "ws" => "wss://wss.quantum-computing.ibm.com/"
-)
+@test account.user_info.username == "Hagenes.Morris@gmail.com"
+@test account.user_info.email == "Hagenes.Morris@gmail.com"
+@test account.user_info.firstName == "Hagenes"
+@test account.user_info.lastName == "Morris"
+@test account.user_info.institution == "Perimeter Quantum Intelligence Lab"
+@test account.access_token == "RzTg74jxdXpQAqm03HuVIYnG1XnSP63AZVVHcIfcxO2PCmcrFQFFQrTFr7SSTKWg"
 
-hubs = apply(patch) do
+user_urls = playback("user_urls.json") do
+    IBMQClient.user_urls(account)
+end
+
+@test user_urls["http"] == "https://api-qcon.quantum-computing.ibm.com/api"
+
+hubs = playback("hubs.json") do
     IBMQClient.hubs(account)
 end
-@test hubs[1]["id"] == response["hubs"][1]["id"]
-@test hubs[2]["id"] == response["hubs"][2]["id"]
 
-user_hubs = apply(patch) do
+@test hubs[1]["name"] == "ibm-q-research"
+
+user_hubs = playback("hubs.json") do
     IBMQClient.user_hubs(account)
 end
 
-@test user_hubs == [
-    Dict("project" => "main", "hub" => "ibm-q", "group" => "open"),
-    Dict("project" => "main", "hub" => "ibm-q-research", "group" => "independent-8")
-]
+@test user_hubs[1]["project"] == "main"
+@test user_hubs[1]["hub"] == "ibm-q"
+@test user_hubs[1]["group"] == "open"
 
-devices = apply(patch) do
+@test user_hubs[2]["project"] == "main"
+@test user_hubs[2]["hub"] == "ibm-q-research"
+@test user_hubs[2]["group"] == "independent-8"
+
+
+devices = playback("devices.json") do
     IBMQClient.devices(account)
 end
 
-@test devices == Configurations.from_dict_inner.(DeviceInfo, response["devices"])
+@test devices[1].backend_name == "ibmq_qasm_simulator"
 
-jobs = apply(patch) do
+jobs = playback("jobs.json") do 
     IBMQClient.jobs(account)
 end
 
-@test jobs == Configurations.from_dict_inner.(JobInfo, response["jobs"])
+@test jobs[1].kind == "q-object-external-storage"
+@test jobs[1].backend["name"] == "ibmq_qasm_simulator"
 
-# token = "e773394070269e3deace4372ed915c99610ee5a0e3be7b2f821e6889f4f4fe93cafdebcce46009e0ec9dd3ff8dca3ad3eb126b3bc59617ee837f2e120e99f268"
-# account = AccountInfo(token)
-# jobs = IBMQClient.jobs(account.project, account.access_token)
+qobj = Qobj(;
+    qobj_id="bell_Qobj_07272018",
+    type="QASM",
+    schema_version=v"1",
+    header=Dict("description"=>"Bell states"),
+    config=ExpConfig(shots=1000, memory_slots=2),
+    experiments=[
+        Experiment(;
+            header=Dict("description"=>"|11>+|00> Bell"),
+            instructions=[
+                Gate(name="u2", qubits=[0], params=[0.0, π]),
+                Gate(name="cx", qubits=[0, 1]),
+                Measure(qubits=[0, 1], memory=[0, 1]),
+            ]
+        ),
+        Experiment(;
+            header=Dict("description"=>"|01>+|10> Bell"),
+            instructions=[
+                Gate(name="u2", qubits=[0], params=[0.0, π]),
+                Gate(name="cx", qubits=[0, 1]),
+                Gate(name="u3", qubits=[0], params=[π, 0.0, π]),
+                Measure(qubits=[0, 1], memory=[0, 1]),
+            ]
+        )
+    ]
+)
 
-# print(jobs[1:2])
+job_info = playback("submit.json") do
+    IBMQClient.submit(account, RemoteJob(dev=devices[1]), qobj)
+end
+
+@test job_info.status == "CREATED"
+
+status_job_info = playback("status.json") do
+    IBMQClient.status(account, job_info)
+end
+
+@test status_job_info.status == "COMPLETED"
+
+results = playback("result.json") do
+    IBMQClient.results(account, job_info)
+end
+
+@test results.backend_name == "ibmq_qasm_simulator"
+@test results.status == "COMPLETED"

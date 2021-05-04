@@ -131,13 +131,13 @@ function submit(account::AccountInfo, remote_job::RemoteJob, qobj::Schema.Qobj)
     job_api = JobAPI(account.project, job_id)
 
     try
-        @mock put_object_storage(job_api, upload_url, qobj, account.access_token)
-        response = @mock callback_upload(job_api, account.access_token)
+        put_object_storage(job_api, upload_url, qobj, account.access_token)
+        response = callback_upload(job_api, account.access_token)
         return update_job_info(info, response["job"])
     catch e
         if e isa HTTP.ExceptionRequest.StatusError
             try
-                @mock cancel(job_api, account.access_token)
+                cancel(job_api, account.access_token)
             catch e
                 if !(e isa HTTP.ExceptionRequest.StatusError)
                     rethrow(e)
@@ -152,6 +152,36 @@ end
 
 function status(account::AccountInfo, job::JobInfo)
     job_api = JobAPI(account.project, job.id)
-    new = @mock status(job_api, account.access_token)
+    new = status(job_api, account.access_token)
     return update_job_info(job, new)
+end
+
+function results(account::AccountInfo, job::JobInfo; use_object_storage::Bool = true)
+    response = status(account, job)
+    response.status == "COMPLETED" || return
+
+    job_api = JobAPI(account.project, job.id)
+
+    if use_object_storage
+        url = result_url(job_api, account.access_token)["url"]
+        result_response = get_object_storage(job_api, url, account.access_token)
+
+        try
+            callback_download(job_api, account.access_token)
+        catch e
+            if e isa HTTP.ExceptionRequest.StatusError
+                error("An error occurred while sending download completion acknowledgement.")
+            else
+                rethrow(e)
+            end
+        end
+        return Configurations.from_dict_inner(Schema.Result, result_response)
+    else
+        response = retreive_job_info(job_api, account.access_token)
+        if haskey(response, "qObjectResult")
+            return response["qObjectResult"]
+        else
+            error("Unexpected return value received from the server: $response")
+        end
+    end
 end

@@ -65,18 +65,18 @@ function request(api::IBMQAPI, method::String, path::String, body=HTTP.nobody; h
 
     uri = api_uri(api, path, query)
     layers = api_layers(api; kw...)
-    response = @mock HTTP.request(layers, method, uri, HTTP.mkheaders(headers), body; kw...)
+    response = HTTP.request(layers, method, uri, HTTP.mkheaders(headers), body; kw...)
     return to_json(response)
 end
 
 function get(api::AbstractAPI, path::String, body=HTTP.nobody; kw...)
-    @mock request(api, "GET", path, body; kw...)
+    request(api, "GET", path, body; kw...)
 end
 
-post(api::AbstractAPI, path::String, body=HTTP.nobody; kw...) = @mock request(api, "POST", path, body; kw...)
-put(api::AbstractAPI, path::String, body=HTTP.nobody; kw...) = @mock request(api, "PUT", path, body; kw...)
-patch(api::AbstractAPI, path::String, body=HTTP.nobody; kw...) = @mock request(api, "PATCH", path, body; kw...)
-head(api::AbstractAPI, path::String, body=HTTP.nobody; kw...) = @mock request(api, "HEAD", path, body; kw...)
+post(api::AbstractAPI, path::String, body=HTTP.nobody; kw...) = request(api, "POST", path, body; kw...)
+put(api::AbstractAPI, path::String, body=HTTP.nobody; kw...) = request(api, "PUT", path, body; kw...)
+patch(api::AbstractAPI, path::String, body=HTTP.nobody; kw...) = request(api, "PATCH", path, body; kw...)
+head(api::AbstractAPI, path::String, body=HTTP.nobody; kw...) = request(api, "HEAD", path, body; kw...)
 
 
 """

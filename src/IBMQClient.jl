@@ -7,7 +7,6 @@ using JSON
 using UUIDs
 using URIs
 using Dates
-using Mocking
 using Configurations
 using REPL.TerminalMenus
 using Crayons.Box
