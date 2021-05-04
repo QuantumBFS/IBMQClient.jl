@@ -387,6 +387,11 @@ run required more than max credits).
     max_credits::Maybe{Int} = nothing
 end
 
+"""
+    abstract type Instruction <: IBMQSchema end
+
+Abstract type for Qobj schema instructions.
+"""
 abstract type Instruction <: IBMQSchema end
 
 Configurations.is_option(::Type{T}) where {T <: Instruction} = true

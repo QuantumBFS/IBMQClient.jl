@@ -1,6 +1,6 @@
 module IBMQClient
 
-export QiskitRC, AccountInfo, JobInfo, RemoteJob
+export AccountInfo, JobInfo, RemoteJob
 
 using HTTP
 using JSON

@@ -24,29 +24,46 @@ function login(qiskitrc::String=expanduser("~/.qiskit/qiskitrc"))
     return login(AuthAPI(URI(rc.ibmq.url)), rc.ibmq.token)
 end
 
+"""
+    struct AccountInfo
+
+    AccountInfo([token=read_token()])
+
+Create an `AccountInfo` object from given IBMQ API token. You can
+create your own token at https://quantum-computing.ibm.com/ after
+login. It will look at `~/.qiskit/qiskitrc` for the API token by
+default. See [`read_token`](@ref) for more information.
+"""
 @option struct AccountInfo
     access_token::String
     auth::AuthAPI
     service::ServiceAPI
     project::ProjectAPI
     user_info::Schema.UserInfo
-end
 
-function AccountInfo(token::String)
-    auth = AuthAPI()
-    response = login(auth, token)
-    access_token = response["id"]
-    info = user_info(auth, access_token)
-    service = ServiceAPI(info["urls"]["http"])
-    user_hub = first(user_hubs(service, access_token))
-    project = ProjectAPI(service.endpoint, user_hub["hub"], user_hub["group"], user_hub["project"])
-    return AccountInfo(access_token, auth, service, project, Schema.UserInfo(info))
+    AccountInfo() = AccountInfo(read_token())
+
+    function AccountInfo(token::String)
+        auth = AuthAPI()
+        response = login(auth, token)
+        access_token = response["id"]
+        info = user_info(auth, access_token)
+        service = ServiceAPI(info["urls"]["http"])
+        user_hub = first(user_hubs(service, access_token))
+        project = ProjectAPI(service.endpoint, user_hub["hub"], user_hub["group"], user_hub["project"])
+        new(access_token, auth, service, project, Schema.UserInfo(info))
+    end
 end
 
 user_urls(x::AccountInfo) = x.user_info.urls
 hubs(x::AccountInfo) = hubs(x.service, x.access_token)
 user_hubs(x::AccountInfo) = user_hubs(x.service, x.access_token)
 
+"""
+    devices(x::AccountInfo)
+
+Query available devices using given `AccountInfo`.
+"""
 function devices(x::AccountInfo)
     raw = devices(x.project, x.access_token)
     return Configurations.from_dict_inner.(Schema.DeviceInfo, raw)
@@ -89,6 +106,11 @@ function Configurations.convert_to_option(::Type{JobInfo}, ::Type{DateTime}, s::
     DateTime(s, dateformat"yyyy-mm-ddTHH:MM:SS.sZ")
 end
 
+"""
+    jobs(x::AccountInfo; kw...)
+
+Query jobs submitted using given `AccountInfo`.
+"""
 function jobs(x::AccountInfo; kw...)
     raw = jobs(x.project, x.access_token; kw...)
     return Configurations.from_dict_inner.(JobInfo, raw)
@@ -116,6 +138,11 @@ function create_remote_job(x::AccountInfo, job::RemoteJob)
     return Configurations.from_dict_inner(JobInfo, raw)
 end
 
+"""
+    submit(account::AccountInfo, remote_job::RemoteJob, qobj::Schema.Qobj)
+
+Submit a `Qobj` to remote device as a remote_job.
+"""
 function submit(account::AccountInfo, remote_job::RemoteJob, qobj::Schema.Qobj)
     info = create_remote_job(account, remote_job)
     job_id = info.id
@@ -142,12 +169,22 @@ function submit(account::AccountInfo, remote_job::RemoteJob, qobj::Schema.Qobj)
     return
 end
 
+"""
+    status(account::AccountInfo, job::JobInfo)
+
+Query the current status of `job`.
+"""
 function status(account::AccountInfo, job::JobInfo)
     job_api = JobAPI(account.project, job.id)
     new = status(job_api, account.access_token)
     return update_job_info(job, new)
 end
 
+"""
+    results(account::AccountInfo, job::JobInfo; use_object_storage::Bool = true)
+
+Download the results of given `job`, return `nothing` if the job status is not `COMPLETED`.
+"""
 function results(account::AccountInfo, job::JobInfo; use_object_storage::Bool = true)
     response = status(account, job)
     response.status == "COMPLETED" || return
