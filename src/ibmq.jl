@@ -80,12 +80,6 @@ end
     hubInfo::Maybe{Dict{String, Any}} = nothing
 end
 
-function JobInfo(info::JobInfo; kw...)
-    d = to_dict(info; exclude_nothing=true)
-    Configurations.from_kwargs!(d, JobInfo; kw...)
-    return Configurations.from_dict_inner(JobInfo, d)
-end
-
 function update_job_info(info::JobInfo, new::AbstractDict)
     d = to_dict(info; exclude_nothing=true)
     merge!(d, new)
