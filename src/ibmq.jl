@@ -131,13 +131,13 @@ function submit(account::AccountInfo, remote_job::RemoteJob, qobj::Schema.Qobj)
     job_api = JobAPI(account.project, job_id)
 
     try
-        put_object_storage(job_api, upload_url, qobj, account.access_token)
-        response = callback_upload(job_api, account.access_token)
+        @mock put_object_storage(job_api, upload_url, qobj, account.access_token)
+        response = @mock callback_upload(job_api, account.access_token)
         return update_job_info(info, response["job"])
     catch e
         if e isa HTTP.ExceptionRequest.StatusError
             try
-                cancel(job_api, account.access_token)
+                @mock cancel(job_api, account.access_token)
             catch e
                 if !(e isa HTTP.ExceptionRequest.StatusError)
                     rethrow(e)
@@ -152,6 +152,6 @@ end
 
 function status(account::AccountInfo, job::JobInfo)
     job_api = JobAPI(account.project, job.id)
-    new = status(job_api, account.access_token)
+    new = @mock status(job_api, account.access_token)
     return update_job_info(job, new)
 end

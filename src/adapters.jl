@@ -2,8 +2,28 @@
 # the adapters returns the raw JSON in Dict{String, Any}
 export AuthAPI, ServiceAPI, ProjectAPI, JobAPI
 
+abstract type AbstractAPI end
+
+endpoint(api::AbstractAPI) = api.endpoint
+api_layers(::AbstractAPI; kw...) = HTTP.stack(;kw...)
+function api_uri(api::AbstractAPI, path::String, query=nothing)
+    uri = endpoint(api)::URI
+    # NOTE: this directly set the query to query
+    if query === nothing
+        return joinpath(uri, path)
+    else
+        isempty(uri.query) || error("non empty query in API endpoint is not supported")
+        return URI(joinpath(uri, path); query=query)
+    end
+end
+
+function to_json(response)
+    body = HTTP.payload(response, String)
+    return JSON.parse(body)
+end
+
 "abstract REST API type for IBM Q"
-abstract type IBMQAPI <: REST.AbstractAPI end
+abstract type IBMQAPI <: AbstractAPI end
 
 """
     create_headers(api::IBMQAPI[, headers=HTTP.Header[]; kw...])
@@ -17,7 +37,7 @@ function create_headers(::IBMQAPI, headers=HTTP.Header[]; kw...)
     HTTP.setkv(headers, "X-Qx-Client-Application", "IBMQClient.jl")
     HTTP.setkv(headers, "Connection", "keep-alive")
     HTTP.setkv(headers, "Accept", "*/*")
-    access_token = get(kw, :access_token, nothing)
+    access_token = Base.get(kw, :access_token, nothing)
     if access_token === nothing
         HTTP.rmkv(headers, "X-Access-Token")
     else
@@ -26,8 +46,7 @@ function create_headers(::IBMQAPI, headers=HTTP.Header[]; kw...)
     return headers
 end
 
-# handle authentication
-function REST.request(api::IBMQAPI, method::String, path::String, body=HTTP.nobody; headers=HTTP.Header[], kw...)
+function request(api::IBMQAPI, method::String, path::String, body=HTTP.nobody; headers=HTTP.Header[], query=nothing, kw...)
     headers = create_headers(api, headers; kw...)
 
     if body === nothing
@@ -44,8 +63,21 @@ function REST.request(api::IBMQAPI, method::String, path::String, body=HTTP.nobo
         error("invalid content type: $(typeof(body))")
     end
 
-    return REST.request(REST.API(api), method, path, body; headers=headers, kw...)
+    uri = api_uri(api, path, query)
+    layers = api_layers(api; kw...)
+    response = @mock HTTP.request(layers, method, uri, HTTP.mkheaders(headers), body; kw...)
+    return to_json(response)
 end
+
+function get(api::AbstractAPI, path::String, body=HTTP.nobody; kw...)
+    @mock request(api, "GET", path, body; kw...)
+end
+
+post(api::AbstractAPI, path::String, body=HTTP.nobody; kw...) = @mock request(api, "POST", path, body; kw...)
+put(api::AbstractAPI, path::String, body=HTTP.nobody; kw...) = @mock request(api, "PUT", path, body; kw...)
+patch(api::AbstractAPI, path::String, body=HTTP.nobody; kw...) = @mock request(api, "PATCH", path, body; kw...)
+head(api::AbstractAPI, path::String, body=HTTP.nobody; kw...) = @mock request(api, "HEAD", path, body; kw...)
+
 
 """
     AuthAPI <: IBMQAPI
@@ -62,7 +94,7 @@ end
 Login with user token.
 """
 function login(api::AuthAPI, token::String)
-    return REST.post(api, "users/loginWithToken", Dict("apiToken" => token)) |> REST.json
+    return post(api, "users/loginWithToken", Dict("apiToken" => token))
 end
 
 """
@@ -71,7 +103,7 @@ end
 Get user info of given IBM Q account access token.
 """
 function user_info(api::AuthAPI, access_token::String)
-    return REST.get(api, "users/me"; access_token=access_token) |> REST.json
+    return get(api, "users/me"; access_token=access_token)
 end
 
 """
@@ -115,7 +147,7 @@ end
 Get alll IBM hubs.
 """
 function hubs(api::ServiceAPI, access_token::String)
-    return REST.get(api, "Network"; access_token=access_token) |> REST.json
+    return get(api, "Network"; access_token=access_token)
 end
 
 """
@@ -181,7 +213,7 @@ end
 Query available devices.
 """
 function devices(api::ProjectAPI, access_token::String; timeout = 0)
-    return REST.get(api, "devices/v/1"; readtimeout = timeout, access_token = access_token) |> REST.json
+    return get(api, "devices/v/1"; readtimeout = timeout, access_token = access_token)
 end
 
 """
@@ -207,7 +239,7 @@ function jobs(api::ProjectAPI, access_token::String; descending::Bool=true, limi
         query["where"] = extra_filter
     end
 
-    REST.get(api, "Jobs/status/v/1"; access_token=access_token, query=Dict("filter" => JSON.json(query))) |> REST.json
+    get(api, "Jobs/status/v/1"; access_token=access_token, query=Dict("filter" => JSON.json(query)))
 end
 
 """
@@ -242,7 +274,7 @@ function create_remote_job(api::ProjectAPI, device_name::String, access_token::S
         payload["tags"] = job_tags
     end
 
-    return REST.post(api, "Jobs", payload; access_token=access_token) |> REST.json
+    return post(api, "Jobs", payload; access_token=access_token)
 end
 
 struct JobAPI <: IBMQAPI
@@ -254,31 +286,31 @@ function JobAPI(api::ProjectAPI, job_id::String)
 end
 
 function upload_url(api::JobAPI, access_token::String)
-    REST.get(api, "jobUploadUrl"; access_token=access_token) |> REST.json
+    get(api, "jobUploadUrl"; access_token=access_token)
 end
 
 function retreive_job_info(api::JobAPI, access_token::String)
-    REST.get(api, "v/1"; access_token=access_token) |> REST.json
+    get(api, "v/1"; access_token=access_token)
 end
 
 function cancel(api::JobAPI, access_token::String)
-    REST.post(api, "cancel"; access_token=access_token) |> REST.json
+    post(api, "cancel"; access_token=access_token)
 end
 
 function properties(api::JobAPI, access_token::String)
-    REST.get(api, "properties"; access_token=access_token) |> REST.json
+    get(api, "properties"; access_token=access_token)
 end
 
 function result_url(api::JobAPI, access_token::String)
-    REST.get(api, "resultDownloadUrl"; access_token=access_token) |> REST.json
+    get(api, "resultDownloadUrl"; access_token=access_token)
 end
 
 function download_url(api::JobAPI, access_token::String)
-    REST.get(api, "jobDownloadUrl"; access_token=access_token) |> REST.json
+    get(api, "jobDownloadUrl"; access_token=access_token)
 end
 
 function status(api::JobAPI, access_token::String)
-    REST.get(api, "status/v/1"; access_token=access_token) |> REST.json
+    get(api, "status/v/1"; access_token=access_token)
 end
 
 function put_object_storage(api::JobAPI, url::String, qobj::Schema.Qobj, access_token::String)
@@ -294,13 +326,14 @@ function put_object_storage(api::JobAPI, url::String, qobj::String, access_token
 end
 
 function get_object_storage(api::JobAPI, url::String, access_token::String)
-    HTTP.get(url, create_headers(api; access_token=access_token); readtimeout=600) |> REST.json
+    response = HTTP.get(url, create_headers(api; access_token=access_token); readtimeout=600)
+    return to_json(response)
 end
 
 function callback_upload(api::JobAPI, access_token::String)
-    REST.post(api, "jobDataUploaded"; access_token=access_token) |> REST.json
+    post(api, "jobDataUploaded"; access_token=access_token)
 end
 
 function callback_download(api::JobAPI, access_token::String)
-    REST.post(api, "resultDownloaded"; access_token=access_token) |> REST.json
+    post(api, "resultDownloaded"; access_token=access_token)
 end

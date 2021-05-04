@@ -4,10 +4,14 @@ using Test
     include("schema.jl")
 end
 
-@testset "REST" begin
-    include("rest.jl")    
+@testset "adapters" begin
+    include("adapters.jl")
 end
 
-@testset "IBM Q Interface" begin
-    include("ibmq.jl")    
-end
+# @testset "REST" begin
+#     include("rest.jl")    
+# end
+
+# @testset "IBM Q Interface" begin
+#     include("ibmq.jl")    
+# end
