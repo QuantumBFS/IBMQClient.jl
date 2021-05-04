@@ -1,3 +1,4 @@
 [deps]
+DocThemeIndigo = "8bac0ac5-51bf-41f9-885e-2bf1ac2bec5f"
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
 IBMQClient = "02860bad-daa6-4506-8736-4a3616c18085"
