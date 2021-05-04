@@ -1,7 +1,7 @@
 name = "IBMQClient"
 uuid = "02860bad-daa6-4506-8736-4a3616c18085"
 authors = ["Roger-luo <rogerluo.rl18@gmail.com> and contributors"]
-version = "0.2.1"
+version = "0.3.0"
 
 [deps]
 Configurations = "5218b696-f38b-4ac9-8b61-a12ec717816d"
