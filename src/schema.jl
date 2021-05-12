@@ -513,7 +513,7 @@ circuit may contain multiple classical and quantum registers, but Qobj flattens
 them into a single memory and single set of qubits.
 - `config` (optional): Configuration structure for user settings that can be different in each
 experiment. These will override the configuration settings of the whole job. See [`ExpConfig`](@ref).
-`instructions`: List of sequence commands that define the experiment. See [`Instruction`](@ref).
+- `instructions`: List of sequence commands that define the experiment. See [`Instruction`](@ref).
 """
 @option struct Experiment <: IBMQSchema
     header::Maybe{Dict{String, Any}} = nothing
