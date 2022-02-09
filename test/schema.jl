@@ -48,12 +48,13 @@ info = Configurations.from_dict(GateInfo, d)
 Qobj(;
     qobj_id="bell_Qobj_07272018",
     type="QASM",
-    schema_version=v"1",
+    schema_version=v"1.3",
     header=Dict("description"=>"Bell states"),
     config=ExpConfig(shots=1000, memory_slots=2),
     experiments=[
         Experiment(;
             header=Dict("description"=>"|11>+|00> Bell"),
+            config=ExpConfig(shots=1000, memory_slots=2, n_qubits=2),
             instructions=[
                 Gate(name="u2", qubits=[0], params=[0.0, π]),
                 Gate(name="cx", qubits=[0, 1]),
@@ -62,6 +63,7 @@ Qobj(;
         ),
         Experiment(;
             header=Dict("description"=>"|01>+|10> Bell"),
+            config=ExpConfig(shots=1000, memory_slots=2, n_qubits=2),
             instructions=[
                 Gate(name="u2", qubits=[0], params=[0.0, π]),
                 Gate(name="cx", qubits=[0, 1]),
