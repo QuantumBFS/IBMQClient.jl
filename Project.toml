@@ -1,7 +1,7 @@
 name = "IBMQClient"
 uuid = "02860bad-daa6-4506-8736-4a3616c18085"
 authors = ["Roger-luo <rogerluo.rl18@gmail.com> and contributors"]
-version = "0.3.4"
+version = "0.3.5"
 
 [deps]
 ConfParser = "88353bc9-fd38-507d-a820-d3b43837d6b9"
