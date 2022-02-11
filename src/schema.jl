@@ -383,6 +383,7 @@ run required more than max credits).
 @option struct ExpConfig <: IBMQSchema
     shots::Int = 1024
     memory_slots::Int
+    n_qubits::Maybe{Int} = nothing
     seed::Maybe{Int} = nothing
     max_credits::Maybe{Int} = nothing
 end
