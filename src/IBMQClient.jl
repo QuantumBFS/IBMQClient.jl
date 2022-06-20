@@ -7,6 +7,7 @@ using JSON
 using UUIDs
 using URIs
 using Dates
+using ConfParser
 using Configurations
 using REPL.TerminalMenus
 using Crayons.Box
