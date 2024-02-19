@@ -328,6 +328,7 @@ simulator data). See below.
     status::String
     success::Bool
     meas_level::Int
+    circ_id::Int
     time_taken::Float64
     seed_simulator::Maybe{Int} = nothing
     seed::Maybe{Int} = nothing
