@@ -194,7 +194,6 @@ function results(account::AccountInfo, job::JobInfo; use_object_storage::Bool=tr
                 rethrow(e)
             end
         end
-        println(result_response)
         return Configurations.from_dict_inner(Schema.Result, result_response)
     else
         response = retreive_job_info(job_api, account.access_token)
