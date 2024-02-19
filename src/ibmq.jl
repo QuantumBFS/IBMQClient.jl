@@ -66,15 +66,15 @@ end
 
 @option mutable struct JobInfo
     kind::String
-    backend::Dict{String, String}
+    backend::Dict{String,String}
     userId::String
     status::String
     id::String
     # optional
-    timePerStep::Maybe{Dict{String, String}} = nothing
+    timePerStep::Maybe{Dict{String,String}} = nothing
     name::Maybe{String} = nothing
-    share_level::Maybe{Int}=nothing
-    tags::Maybe{Vector{String}}=nothing
+    share_level::Maybe{Int} = nothing
+    tags::Maybe{Vector{String}} = nothing
     qobj::Maybe{Schema.Qobj} = nothing
     allowObjectStorage::Maybe{Bool} = nothing
     objectStorageInfo::Maybe{StorageInfo} = nothing
@@ -82,7 +82,7 @@ end
     runMode::Maybe{String} = nothing
     creationDate::Maybe{DateTime} = nothing
     endDate::Maybe{DateTime} = nothing
-    hubInfo::Maybe{Dict{String, Any}} = nothing
+    hubInfo::Maybe{Dict{String,Any}} = nothing
 end
 
 function update_job_info(info::JobInfo, new::AbstractDict)
@@ -108,9 +108,9 @@ end
 
 @option struct RemoteJob
     dev::String
-    name::Maybe{String}=nothing
-    share_level::Maybe{Int}=nothing
-    tags::Maybe{Vector{String}}=nothing
+    name::Maybe{String} = nothing
+    share_level::Maybe{Int} = nothing
+    tags::Maybe{Vector{String}} = nothing
 end
 
 function RemoteJob(dev::Schema.DeviceInfo, name, share_level, tags)
@@ -175,7 +175,7 @@ end
 
 Download the results of given `job`, return `nothing` if the job status is not `COMPLETED`.
 """
-function results(account::AccountInfo, job::JobInfo; use_object_storage::Bool = true)
+function results(account::AccountInfo, job::JobInfo; use_object_storage::Bool=true)
     response = status(account, job)
     response.status == "COMPLETED" || return
 
@@ -194,6 +194,7 @@ function results(account::AccountInfo, job::JobInfo; use_object_storage::Bool = 
                 rethrow(e)
             end
         end
+        println(result_response)
         return Configurations.from_dict_inner(Schema.Result, result_response)
     else
         response = retreive_job_info(job_api, account.access_token)
