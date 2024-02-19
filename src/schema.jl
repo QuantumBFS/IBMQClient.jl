@@ -327,6 +327,7 @@ simulator data). See below.
     shots::Union{Int,Vector{Int}}
     status::String
     success::Bool
+    meas_level::Int
     time_taken::Float64
     seed_simulator::Maybe{Int} = nothing
     seed::Maybe{Int} = nothing
@@ -357,7 +358,6 @@ The results data structure from Job.result().
     date::DateTime
     status::String
     success::Bool
-    meas_level::Int
     results::Vector{ExpResult}
 end
 
