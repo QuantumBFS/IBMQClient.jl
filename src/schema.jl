@@ -24,24 +24,24 @@ end
     id::String
     username::String
     email::String
-    urls::Dict{String, Any}
-    userType::String="Standard"
+    urls::Dict{String,Any}
+    userType::String = "Standard"
     firstName::Maybe{String} = nothing
     lastName::Maybe{String} = nothing
     institution::Maybe{String} = nothing
     applications::Vector{String} = String[]
     subscriptions::Subscription = Subscription()
-    readOnly::Bool=false
-    needsRefill::Bool=false
-    iqxPreferences::Dict{String, Any} = Dict{String, Any}()
+    readOnly::Bool = false
+    needsRefill::Bool = false
+    iqxPreferences::Dict{String,Any} = Dict{String,Any}()
     loginAccounts::Vector{Any} = []
-    ibmQNetwork::Bool=true
+    ibmQNetwork::Bool = true
     qNetworkRoles::Vector{String} = []
     roles::Vector{Any} = []
-    emailVerified::Bool=false
-    terms::Dict{String, Any} = Dict{String, Any}()
-    canScheduleBackends::Bool=true
-    servicesRoles::Vector{String}=[]
+    emailVerified::Bool = false
+    terms::Dict{String,Any} = Dict{String,Any}()
+    canScheduleBackends::Bool = true
+    servicesRoles::Vector{String} = []
 end
 
 UserInfo(d::AbstractDict{String}) = from_dict(UserInfo, d)
@@ -139,7 +139,7 @@ the property is false and new tags can be added.
     configurable::Bool = false
     credits_required::Bool = false
     allow_q_object::Bool = false
-    allow_object_storage::Bool=false
+    allow_object_storage::Bool = false
     n_registers::Maybe{Int} = nothing
     open_pulse::Bool = false
     quantum_volume::Maybe{Int} = nothing
@@ -292,11 +292,11 @@ The types of snapshots offered are defined in a separate specification document
 for simulators.
 """
 @option struct ExpData <: IBMQSchema
-    counts::Dict{String, Int}
+    counts::Dict{String,Int}
     memory::Maybe{Vector{String}} = nothing
     statevector::Maybe{Matrix{ComplexF64}} = nothing
     unitary::Maybe{Matrix{ComplexF64}} = nothing
-    snapshots::Maybe{Dict{String, Any}} = nothing
+    snapshots::Maybe{Dict{String,Any}} = nothing
 end
 
 """
@@ -322,11 +322,13 @@ the type of experiment (`"QASM"` or `"PULSE"`) and/or the type of backend (e.g.
 simulator data). See below.
 """
 @option struct ExpResult <: IBMQSchema
-    metadata::Maybe{Dict{String, Any}} = nothing
-    header::Maybe{Dict{String, Any}} = nothing
-    shots::Union{Int, Vector{Int}}
+    metadata::Maybe{Dict{String,Any}} = nothing
+    header::Maybe{Dict{String,Any}} = nothing
+    shots::Union{Int,Vector{Int}}
     status::String
     success::Bool
+    meas_level::Int
+    circ_id::Int
     time_taken::Float64
     seed_simulator::Maybe{Int} = nothing
     seed::Maybe{Int} = nothing
@@ -347,8 +349,8 @@ The results data structure from Job.result().
 - `results`: List of `m` (number of experiments) exp result data structures (defined below).
 """
 @option struct Result <: IBMQSchema
-    header::Maybe{Dict{String, Any}} = nothing
-    metadata::Maybe{Dict{String, Any}} = nothing
+    header::Maybe{Dict{String,Any}} = nothing
+    metadata::Maybe{Dict{String,Any}} = nothing
     time_taken::Maybe{Float64} = nothing
     qobj_id::String
     job_id::String
@@ -395,7 +397,7 @@ Abstract type for Qobj schema instructions.
 """
 abstract type Instruction <: IBMQSchema end
 
-Configurations.is_option(::Type{T}) where {T <: Instruction} = true
+Configurations.is_option(::Type{T}) where {T<:Instruction} = true
 
 """
     struct BooleanFunction <: Instruction
@@ -517,7 +519,7 @@ experiment. These will override the configuration settings of the whole job. See
 - `instructions`: List of sequence commands that define the experiment. See [`Instruction`](@ref).
 """
 @option struct Experiment <: IBMQSchema
-    header::Maybe{Dict{String, Any}} = nothing
+    header::Maybe{Dict{String,Any}} = nothing
     # NOTE: the schema specification didn't mention
     # but this can be optional
     config::Maybe{ExpConfig} = nothing
@@ -548,10 +550,10 @@ the backend that the experiments were compiled for.
     type::String = "QASM"
     schema_version::VersionNumber = v"1.3"
     experiments::Vector{Experiment} = Experiment[]
-    header::Maybe{Dict{String, Any}} = nothing
+    header::Maybe{Dict{String,Any}} = nothing
     config::ExpConfig
 end
 
-Configurations.to_dict(::Type{T}, x::VersionNumber) where {T <: IBMQSchema} = string(x)
+Configurations.to_dict(::Type{T}, x::VersionNumber) where {T<:IBMQSchema} = string(x)
 
 end

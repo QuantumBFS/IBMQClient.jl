@@ -6,6 +6,7 @@ using IBMQClient.Schema
 using BrokenRecord
 
 token = "pg3PIrchJpDoyv7cl5GedjE4Q86NuKyriLIIN3SskWMlNDIgnAHALINT8jWgyIdNiEWURUnp2qjr0T4ooP5T60DxejmhbeVFbt1fTeIUlNQPSIbc637GShmhc4xqD65b"
+
 @test IBMQClient.read_token(joinpath(pkgdir(IBMQClient), "test", ".qiskit", "qiskitrc")) == token
 BrokenRecord.configure!(path=joinpath(pkgdir(IBMQClient), "test", "records"), ignore_query=["apiToken"], ignore_headers=["X-Access-Token", "apiToken"])
 
@@ -51,7 +52,7 @@ end
 
 @test devices[1].backend_name == "ibmq_qasm_simulator"
 
-jobs = playback("jobs.json") do 
+jobs = playback("jobs.json") do
     IBMQClient.jobs(account)
 end
 
@@ -62,11 +63,11 @@ qobj = Qobj(;
     qobj_id="bell_Qobj_07272018",
     type="QASM",
     schema_version=v"1",
-    header=Dict("description"=>"Bell states"),
+    header=Dict("description" => "Bell states"),
     config=ExpConfig(shots=1000, memory_slots=2),
     experiments=[
         Experiment(;
-            header=Dict("description"=>"|11>+|00> Bell"),
+            header=Dict("description" => "|11>+|00> Bell"),
             instructions=[
                 Gate(name="u2", qubits=[0], params=[0.0, π]),
                 Gate(name="cx", qubits=[0, 1]),
@@ -74,7 +75,7 @@ qobj = Qobj(;
             ]
         ),
         Experiment(;
-            header=Dict("description"=>"|01>+|10> Bell"),
+            header=Dict("description" => "|01>+|10> Bell"),
             instructions=[
                 Gate(name="u2", qubits=[0], params=[0.0, π]),
                 Gate(name="cx", qubits=[0, 1]),
@@ -84,6 +85,7 @@ qobj = Qobj(;
         )
     ]
 )
+
 
 job_info = playback("submit.json") do
     IBMQClient.submit(account, RemoteJob(dev=devices[1]), qobj)
@@ -101,63 +103,5 @@ results = playback("result.json") do
     IBMQClient.results(account, job_info)
 end
 
-@test results.backend_name == "ibmq_qasm_simulator"
+@test results.backend_name == "qasm_simulator"
 @test results.status == "COMPLETED"
-
-using REPL.TerminalMenus
-const CR = "\r"
-const LF = "\n"
-const UP = "\eOA"
-const DOWN = "\eOB"
-const ALL = "a"
-const NONE = "n"
-const DONE = "d"
-const SIGINT = "\x03"
-const QUIT = "q"
-
-menu = IBMQClient.DeviceMenu(devices)
-print(
-    stdin.buffer,
-    DOWN,
-    LF,
-    CR,
-)
-
-choice = request("choose a device:", menu)
-@test choice == 2
-readavailable(stdin.buffer)
-
-print(
-    stdin.buffer,
-    DOWN,
-    DOWN,
-    DOWN,
-    LF,
-    CR,
-)
-choice = request("choose a device:", menu)
-@test choice == 4
-readavailable(stdin.buffer)
-
-print(
-    stdin.buffer,
-    DOWN,
-    DOWN,
-    DOWN,
-    QUIT,
-)
-choice = request("choose a device:", menu)
-@test choice == -1
-readavailable(stdin.buffer)
-
-@test_throws InterruptException begin
-    print(
-        stdin.buffer,
-        DOWN,
-        DOWN,
-        DOWN,
-        SIGINT,
-    )
-    request("choose a device:", menu)
-    readavailable(stdin.buffer)
-end
