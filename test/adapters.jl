@@ -6,6 +6,7 @@ using IBMQClient.Schema
 using BrokenRecord
 
 token = "pg3PIrchJpDoyv7cl5GedjE4Q86NuKyriLIIN3SskWMlNDIgnAHALINT8jWgyIdNiEWURUnp2qjr0T4ooP5T60DxejmhbeVFbt1fTeIUlNQPSIbc637GShmhc4xqD65b"
+
 @test IBMQClient.read_token(joinpath(pkgdir(IBMQClient), "test", ".qiskit", "qiskitrc")) == token
 BrokenRecord.configure!(path=joinpath(pkgdir(IBMQClient), "test", "records"), ignore_query=["apiToken"], ignore_headers=["X-Access-Token", "apiToken"])
 
@@ -85,6 +86,7 @@ qobj = Qobj(;
     ]
 )
 
+
 job_info = playback("submit.json") do
     IBMQClient.submit(account, RemoteJob(dev=devices[1]), qobj)
 end
@@ -101,5 +103,5 @@ results = playback("result.json") do
     IBMQClient.results(account, job_info)
 end
 
-@test results.backend_name == "ibmq_qasm_simulator"
+@test results.backend_name == "qasm_simulator"
 @test results.status == "COMPLETED"
